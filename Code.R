@@ -9,3 +9,12 @@ unzip("act.zip", exdir = "data")
 if (file.exists(tmp)) file.remove(tmp)
 
 activity <- data.table::fread(input = "data/activity.csv")
+
+# preprocssing
+data<-aggregate(activity$steps, by = list(activity$date), FUN=sum)
+names(data)<-c("date", "steps")
+
+ggplot(data, aes(x = steps)) +
+  geom_histogram(fill = "Gold") +
+  labs(title = "Daily Steps", x = "Days", y = "Frequency")
+
