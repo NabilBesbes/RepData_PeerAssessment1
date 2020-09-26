@@ -2,7 +2,9 @@
 title: "CodeR"
 author: "Nabil"
 date: "25 September 2020"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -67,13 +69,24 @@ head(meandANDmedian, 10)
 ### What is the average daily activity pattern?
 #### 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 #### 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-
-
-.
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+DT_interval <- aggregate(x=list(meanSteps=DT$steps), by=list(interval=DT$interval), FUN=mean, na.rm=TRUE)
+ggplot(data=DT_interval, aes(x=interval, y=meanSteps)) +
+    geom_line(color = "Blue") +
+    xlab("5-minute interval") +
+    ylab("Steps") 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+mostSteps <- DT_interval[max(DT_interval$meanSteps),]
+mostSteps
+```
+
+### Code to describe and show a strategy for imputing missing data
+
+```{r}
+sum(is.na(DT$steps))
+```
+
+.
