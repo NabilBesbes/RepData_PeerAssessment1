@@ -4,7 +4,6 @@ author: "Nabil"
 date: "25 September 2020"
 output:
   html_document: default
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -51,9 +50,10 @@ head(data)
 
 ### **1.** Make a histogram of the total number of steps taken each day
 ```{r}
-ggplot(data, aes(x = steps)) +
-  geom_histogram(fill = "salmon") +
+g<-ggplot(data, aes(x = steps))
+g<-g + geom_histogram(fill = "salmon") +
   labs(title = "Daily Steps", x = "Days", y = "Frequency")
+g
 ```
 
 ### **2.** Calculate and report the mean and median total number of steps taken per day
