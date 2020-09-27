@@ -88,5 +88,37 @@ mostSteps
 ```{r}
 sum(is.na(DT$steps))
 ```
+creating newDataFrame without missing
 
-.
+```{r}
+DT$steps[is.na(DT$steps)]=mean(DT$steps,na.rm=TRUE)
+newData <- DT
+# the same actions but new DT
+withoutNA<-aggregate(newData$steps, by = list(newData$date), FUN=sum)
+names(withoutNA)<-c("date", "steps")
+ggplot(withoutNA, aes(x = steps)) +
+  geom_histogram(fill = "blue") +
+  labs(title = "Daily Steps (Without missing Values)", x = "Days", y = "Frequency")
+```
+
+
+
+### Are there differences in activity patterns between weekdays and weekends?
+
+```{r echo=TRUE}
+weekend = weekdays(as.Date(newData$date))
+
+weekends=(weekend=="Saturday" | weekend=="Sunday")
+weekend[weekends] = "Weekend"
+weekend[!weekends] = "Weekday"
+
+newData$weekend=factor(weekend)
+```
+
+```{r echo=TRUE}
+sumMeans = aggregate(newData$steps,by=list(newData$interval, newData$weekend), mean)
+
+library(lattice)
+xyplot(sumMeans$steps ~ sumMeans$interval|sumMeans$dayType,sumMeans,type="l",layout=c(1,2), xlab ="5-Minute Interval", ylab="Average numver of steps")
+
+```
